@@ -1,4 +1,4 @@
-<html> <!--test-->
+<html>
 <script type="text/javascript">
 
 var objectBeingSpawned = undefined;
@@ -8,7 +8,7 @@ lastSpawned['color']='red';
 lastSpawned['r']=50;
 var bump_factor = 0.98;
 var stuck_cnt = 0;
-var colors = ['red', 'blue'];
+var ballColors = ['red', 'blue'];
 
 function randomOf( min, max ) {
 	return Math.random() * ( max - min ) + min;
@@ -198,7 +198,7 @@ function stuck_restart( nballs, npacmans, ibp, itp ) {
 	var yv = -0.3 * Math.sin( xv );
 	xv = 0.3 * Math.cos( xv );
 	console.log('itp: '+itp+', ibp: '+ibp);
-	objects[itp] = new Ball( randomOf(5,60), colors[nballs % 2], Date.now(), x, randomOf(0,xv), y, randomOf(0,yv) );
+	objects[itp] = new Ball( randomOf(5,60), ballColors[nballs % 2], Date.now(), x, randomOf(0,xv), y, randomOf(0,yv) );
 
 	if ( nballs != 0 ) { 
 		console.log(1);
