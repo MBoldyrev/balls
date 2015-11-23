@@ -7,6 +7,8 @@ var lastSpawned = Object;
 lastSpawned['color']='red';
 lastSpawned['r']=50;
 var bump_factor = 0.98;
+var stuck_cnt = 0;
+var colors = ['red', 'blue'];
 
 function randomOf( min, max ) {
 	return Math.random() * ( max - min ) + min;
@@ -169,8 +171,9 @@ function stuck_restart( nballs, npacmans, ibp, itp ) {
 			return 0;  
 		}
 		var ibp = objects.indexOf( bgstPcmn );
-		var itp; // index to place new obj at
+		var itp = 0; // index to place new obj at
 		bgstPcmn.ar = new ChangingValue( bgstPcmn.ar.get(), Date.now(), 0.0002 );
+		bgstPcmn.type = 'ball_spawning_pacman';
 	}
 	else {
 		var bgstPcmn = objects[ibp];
@@ -191,13 +194,15 @@ function stuck_restart( nballs, npacmans, ibp, itp ) {
 
 	var x = bgstPcmn.x.get();
 	var y = bgstPcmn.y.get();
-	var xv = bgstPcmn.ar.get()*Math.PI;
-	var yv = 0.3 * Math.sin( xv );
+	var xv = -bgstPcmn.ar.get()*Math.PI;
+	var yv = -0.3 * Math.sin( xv );
 	xv = 0.3 * Math.cos( xv );
-	objects.push( new Ball( randomOf(5,60), "red", Date.now(), x, randomOf(0,xv), y, randomOf(0,yv) ) );
+	console.log('itp: '+itp+', ibp: '+ibp);
+	objects[itp] = new Ball( randomOf(5,60), colors[nballs % 2], Date.now(), x, randomOf(0,xv), y, randomOf(0,yv) );
 
 	if ( nballs != 0 ) { 
-		stuck_restart( nballs - 1, npacmans, ibp, itp );
+		console.log(1);
+		setTimeout('stuck_restart(' + (nballs - 1) + ', ' + npacmans + ', ' + ibp + ', ' + itp + ');', 500 );
 	}
 	else {
 		// last iteration
@@ -205,6 +210,7 @@ function stuck_restart( nballs, npacmans, ibp, itp ) {
 		for( var i = 0; i < npacmans; i++ ) {
 			objects.push( new Pacman( randomOf(20,50), 'black', Date.now(), randomOf(-800,800), 0, randomOf(-800,-200), 0, randomOf(0,2), 0, 1/6, 0) );
 		}
+	bgstPcmn.type = 'Pacman';
 	}
 }
 
@@ -212,11 +218,18 @@ function check_stuck() {
 	for( var obj in objects ) {
 		if( objects[obj].type && objects[obj].type == 'Pacman' )
 			if( objects[obj].state != 'hungry' ||  objects[obj].target ) {
+				stuck_cnt = 0;
 				return 0;
 			}
 	}
-	console.log('stuck at ' + Date.now() ); 
-	setTimeout( "stuck_restart( 20, 6 )", 5000 );
+	//console.log('stuck at ' + Date.now() ); 
+	if( stuck_cnt < 5 )
+		stuck_cnt ++;
+	else {
+		stuck_cnt = 0;
+		stuck_restart( 20, 6 );
+		//setTimeout( "stuck_restart( 20, 6 )", 5000 );
+	}
 }	
 
 function physics() {
