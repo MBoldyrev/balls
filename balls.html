@@ -4,7 +4,7 @@
 var objectBeingSpawned = undefined;
 var mouseDrag = undefined;
 var lastSpawned = Object;
-lastSpawned['color']='red';
+lastSpawned['color']=0;
 lastSpawned['r']=50;
 var bump_factor = 0.98;
 var stuck_cnt = 0;
@@ -45,7 +45,7 @@ function Ball( r, color, t0, x0, dxdt, y0, dydt ) {
 	this.draw = function() {
 		context.beginPath();
 		context.arc( this.x.get(), this.y.get(), this.r, 0, 2*Math.PI, true);
-		context.fillStyle = this.color;
+		context.fillStyle = ballColors[this.color];
 		context.fill();
 		context.stroke();
 	}
@@ -489,10 +489,7 @@ function canvasMouseMove(e) {
 }
 function canvasMouseRightClick(e) {
 	if( objectBeingSpawned && objectBeingSpawned.type == 'notYetABall' ) {
-		if( objectBeingSpawned.color == 'red' )
-			objectBeingSpawned.color = 'blue';
-		else if( objectBeingSpawned.color == 'blue' )
-			objectBeingSpawned.color = 'red';
+		objectBeingSpawned.color = ( objectBeingSpawned.color + 1 ) % ballColors.length;
 	}
 	if (e.preventDefault) 
 		e.preventDefault(); 
@@ -503,6 +500,40 @@ function canvasMouseRightClick(e) {
 	
 }
 
+function objClear() {
+	for( var obj in objects ) {
+		delete objects[obj];
+	}
+	objects.push( new Border() );
+}
+
+function addBalls() {
+	var size_r = document.getElementById('more-balls-size').value; //relative to canvas
+	var size_a_min = Math.sqrt(canvas.height * canvas.width) * size_r * size_r / 10000; //absolute
+	var size_a_max = size_a_min * 1.3;
+	var speed_max = (100-size_r)*(100-size_r)*0.00008;
+	size_a_min *= 0.7;
+	for( var i = 0; i < (100-size_r)*(100-size_r)*(100-size_r)*0.00004; i++ ) {
+		objects.push( new Ball( randomOf(size_a_min, size_a_max), i % ballColors.length, Date.now(), randomOf(size_a_max, canvas.width-size_a_max), randomOf(-speed_max,speed_max), randomOf(size_a_max, canvas.height-size_a_max), randomOf(-speed_max,speed_max) ) );
+	}
+}
+
+
+function addPacmans() {
+	var size_r = document.getElementById('more-pacmans-size').value; //relative to canvas
+	var size_a_min = Math.sqrt(canvas.height * canvas.width) * size_r * size_r / 10000; //absolute
+	var size_a_max = size_a_min * 1.3;
+	size_a_min *= 0.7;
+	for( var i = 0; i < (100-size_r)*(100-size_r)*(100-size_r)*0.00001; i++ ) {
+		objects.push( new Pacman( randomOf(size_a_min, size_a_max), 'black', Date.now(), randomOf(size_a_max, canvas.width-size_a_max), 0, randomOf(size_a_max, canvas.height-size_a_max), 0, randomOf(0,2), 0, 1/6, 0) );
+	}
+}
+
+function bump_factor_change() {
+	bump_factor = Math.log(document.getElementById('bump-factor-ui').value * 220.25465794806706 + 1)/10;
+	console.log(bump_factor);
+}
+	
 
 function scene() { // <<<---------------------------MAIN----FUNC-----------------
 	canvas = document.getElementById('myCanvas');
@@ -550,8 +581,8 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 		    // -- the set can be modified any time, changes apply
 		    // -- immediately
 
-		//new Ball( 50, "red", Date.now(), 400, 0.0, 180, -0.1 ),
-		//new Ball( 50, "red", Date.now(), 120, -0.5, 120, -0.6 ),
+		//new Ball( 50, 0, Date.now(), 400, 0.0, 180, -0.1 ),
+		//new Ball( 50, 0, Date.now(), 120, -0.5, 120, -0.6 ),
 		//new Pacman( 200, 'black', Date.now(), 200, 0, 200, 0, 0, 0, 1/6, 0 ),
 		new Border(),
 		
@@ -559,9 +590,8 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 
 	// populate objects[] with for loops
 	
-	for( var i = 0; i < 25; i++ ) {
-		objects.push( new Ball( randomOf(5,60), "red", Date.now(), randomOf(51,canvas.width-51), randomOf(-0.2,0.2), randomOf(51,canvas.height-51), randomOf(-0.2,0.2) ) );
-		objects.push( new Ball( randomOf(5,60), "blue", Date.now(), randomOf(51,canvas.width-51), randomOf(-0.2,0.2), randomOf(51,canvas.height-51), randomOf(-0.2,0.2) ) );
+	for( var i = 0; i < 50; i++ ) {
+		objects.push( new Ball( randomOf(5,60), i % ballColors.length, Date.now(), randomOf(51,canvas.width-51), randomOf(-0.2,0.2), randomOf(51,canvas.height-51), randomOf(-0.2,0.2) ) );
 	}
 	
 	for( var i = 0; i < 10; i++ ) {
@@ -583,42 +613,6 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 	canvas.addEventListener('mousedown', canvasMouseDown );
 	canvas.addEventListener('mouseup', canvasMouseUp );
 }
-
-function objClear() {
-	for( var obj in objects ) {
-		delete objects[obj];
-	}
-	objects.push( new Border() );
-}
-
-function addBalls() {
-	var size_r = document.getElementById('more-balls-size').value; //relative to canvas
-	var size_a_min = Math.sqrt(canvas.height * canvas.width) * size_r * size_r / 10000; //absolute
-	var size_a_max = size_a_min * 1.3;
-	var speed_max = (100-size_r)*(100-size_r)*0.00008;
-	size_a_min *= 0.7;
-	for( var i = 0; i < (100-size_r)*(100-size_r)*(100-size_r)*0.00002; i++ ) {
-		objects.push( new Ball( randomOf(size_a_min, size_a_max), "red", Date.now(), randomOf(size_a_max, canvas.width-size_a_max), randomOf(-speed_max,speed_max), randomOf(size_a_max, canvas.height-size_a_max), randomOf(-speed_max,speed_max) ) );
-		objects.push( new Ball( randomOf(size_a_min, size_a_max), "blue", Date.now(), randomOf(size_a_max, canvas.width-size_a_max), randomOf(-speed_max,speed_max), randomOf(size_a_max, canvas.height-size_a_max), randomOf(-speed_max,speed_max) ) );
-	}
-}
-
-
-function addPacmans() {
-	var size_r = document.getElementById('more-pacmans-size').value; //relative to canvas
-	var size_a_min = Math.sqrt(canvas.height * canvas.width) * size_r * size_r / 10000; //absolute
-	var size_a_max = size_a_min * 1.3;
-	size_a_min *= 0.7;
-	for( var i = 0; i < (100-size_r)*(100-size_r)*(100-size_r)*0.00001; i++ ) {
-		objects.push( new Pacman( randomOf(size_a_min, size_a_max), 'black', Date.now(), randomOf(size_a_max, canvas.width-size_a_max), 0, randomOf(size_a_max, canvas.height-size_a_max), 0, randomOf(0,2), 0, 1/6, 0) );
-	}
-}
-
-function bump_factor_change() {
-	bump_factor = Math.log(document.getElementById('bump-factor-ui').value * 220.25465794806706 + 1)/10;
-	console.log(bump_factor);
-}
-	
 
 </script>
 <body onload="scene()"">
