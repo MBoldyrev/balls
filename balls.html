@@ -458,12 +458,12 @@ function canvasMouseOut(e) {
 	objectBeingSpawned = undefined;
 }
 function canvasMouseEnter(e) {
-	if( whatToSpawn == 'ball' ) { // ball
+	if( whatToSpawn == 'Ball' ) { // ball
 		objectBeingSpawned = new Ball( lastSpawned['r'], lastSpawned['color'], Date.now(), e.offsetX, 0.0, e.offsetY, 0.0 );
 		objectBeingSpawned.type = "notYetABall";
 		objects.push(objectBeingSpawned);
 	}
-	if( whatToSpawn == 'pacman' ) { // pacman
+	if( whatToSpawn == 'Pacman' ) { // pacman
 		objectBeingSpawned = new Pacman( lastSpawned['r'], 'black', Date.now(), e.offsetX, 0, e.offsetY, 0, 0, 0, 1/6, 0 );
 		objectBeingSpawned.type = "notYetAPacman";
 		objects.push(objectBeingSpawned);
@@ -502,13 +502,13 @@ function canvasMouseRightClick(e) {
 
 function changeSpawnedObjectBall(e) {
 	e.target.style['border-style'] = 'inset';
-	delete document.getElementsByClassName('balls-control__pacman-spawn');
+	document.getElementsByClassName('balls-control__pacman-spawn')[0].style['border-style'] = '';
 	whatToSpawn = 'Ball';
 }
 
 function changeSpawnedObjectPacman(e) {
 	e.target.style['border-style'] = 'inset';
-	delete document.getElementsByClassName('balls-control__ball-spawn');
+	document.getElementsByClassName('balls-control__ball-spawn')[0].style['border-style'] = '';
 	whatToSpawn = 'Pacman';
 }
 
