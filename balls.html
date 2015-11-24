@@ -511,6 +511,10 @@ function changeSpawnedObjectPacman(e) {
 	document.getElementsByClassName('balls-control__ball-spawn')[0].style['border-style'] = '';
 	whatToSpawn = 'Pacman';
 }
+function changeElasticity(e) {
+	bump_factor = Math.log(e.target.value * 220.25465794806706 + 1)/10;
+	console.log(bump_factor);
+}
 
 function objClear() {
 	for( var obj in objects ) {
@@ -539,11 +543,6 @@ function addPacmans() {
 	for( var i = 0; i < (100-size_r)*(100-size_r)*(100-size_r)*0.00001; i++ ) {
 		objects.push( new Pacman( randomOf(size_a_min, size_a_max), 'black', Date.now(), randomOf(size_a_max, canvas.width-size_a_max), 0, randomOf(size_a_max, canvas.height-size_a_max), 0, randomOf(0,2), 0, 1/6, 0) );
 	}
-}
-
-function bump_factor_change() {
-	bump_factor = Math.log(document.getElementById('bump-factor-ui').value * 220.25465794806706 + 1)/10;
-	console.log(bump_factor);
 }
 	
 
@@ -626,6 +625,7 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 	canvas.addEventListener('mouseup', canvasMouseUp );
 	document.getElementsByClassName('balls-control__ball-spawn')[0].addEventListener('click', changeSpawnedObjectBall );
 	document.getElementsByClassName('balls-control__pacman-spawn')[0].addEventListener('click', changeSpawnedObjectPacman );
+	document.getElementsByClassName('balls-control__elasticity')[0].addEventListener('change', changeElasticity );
 }
 
 </script>
@@ -638,7 +638,7 @@ Spawn a:<br/>
 <button  onclick="objClear()">Clear</button><br/>
 <button  onclick="addBalls()">More balls ofsize:</button><input type="range" id="more-balls-size" min="10" max="40" step="1" value="15"> <br/>
 <button  onclick="addPacmans()">More pacmans of size:</button><input type="range" id="more-pacmans-size" min="15" max="70" step="1" value="20"> <br/>
-elasticity: <input type="range" id="bump-factor-ui" min="0" max="100" step="1" value="95" onchange="bump_factor_change()"> <br/>
+elasticity: <input type="range" class="balls-control__elasticity" min="0" max="100" step="1" value="95" onchange="bump_factor_change()"> <br/>
 </body>
 </html>
 
