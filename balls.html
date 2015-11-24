@@ -9,6 +9,7 @@ lastSpawned['r']=50;
 var bump_factor = 0.98;
 var stuck_cnt = 0;
 var ballColors = ['red', 'blue'];
+var whatToSpawn = undefined;
 
 function randomOf( min, max ) {
 	return Math.random() * ( max - min ) + min;
@@ -198,7 +199,7 @@ function stuck_restart( nballs, npacmans, ibp, itp ) {
 	var yv = -0.3 * Math.sin( xv );
 	xv = 0.3 * Math.cos( xv );
 	console.log('itp: '+itp+', ibp: '+ibp);
-	objects[itp] = new Ball( randomOf(5,60), ballColors[nballs % 2], Date.now(), x, randomOf(0,xv), y, randomOf(0,yv) );
+	objects[itp] = new Ball( randomOf(5,60), nballs % 2, Date.now(), x, randomOf(0,xv), y, randomOf(0,yv) );
 
 	if ( nballs != 0 ) { 
 		console.log(1);
@@ -457,13 +458,12 @@ function canvasMouseOut(e) {
 	objectBeingSpawned = undefined;
 }
 function canvasMouseEnter(e) {
-	var whatToSpawn = document.getElementsByName('selected-object');
-	if( whatToSpawn[0].checked ) { // ball
+	if( whatToSpawn == 'ball' ) { // ball
 		objectBeingSpawned = new Ball( lastSpawned['r'], lastSpawned['color'], Date.now(), e.offsetX, 0.0, e.offsetY, 0.0 );
 		objectBeingSpawned.type = "notYetABall";
 		objects.push(objectBeingSpawned);
 	}
-	if( whatToSpawn[1].checked ) { // pacman
+	if( whatToSpawn == 'pacman' ) { // pacman
 		objectBeingSpawned = new Pacman( lastSpawned['r'], 'black', Date.now(), e.offsetX, 0, e.offsetY, 0, 0, 0, 1/6, 0 );
 		objectBeingSpawned.type = "notYetAPacman";
 		objects.push(objectBeingSpawned);
@@ -498,6 +498,18 @@ function canvasMouseRightClick(e) {
 		e.stopPropagation();
 	else e.cancelBubble=true;
 	
+}
+
+function changeSpawnedObjectBall(e) {
+	e.target.style['border-style'] = 'inset';
+	delete document.getElementsByClassName('balls-control__pacman-spawn');
+	whatToSpawn = 'Ball';
+}
+
+function changeSpawnedObjectPacman(e) {
+	e.target.style['border-style'] = 'inset';
+	delete document.getElementsByClassName('balls-control__ball-spawn');
+	whatToSpawn = 'Pacman';
 }
 
 function objClear() {
@@ -538,8 +550,8 @@ function bump_factor_change() {
 function scene() { // <<<---------------------------MAIN----FUNC-----------------
 	canvas = document.getElementById('myCanvas');
 	context = canvas.getContext('2d');
-	canvas.width = 800;
-	canvas.height = 800;
+	canvas.width = 200;
+	canvas.height = 400;
 
 
 
@@ -590,11 +602,11 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 
 	// populate objects[] with for loops
 	
-	for( var i = 0; i < 50; i++ ) {
+	for( var i = 0; i < 10; i++ ) {
 		objects.push( new Ball( randomOf(5,60), i % ballColors.length, Date.now(), randomOf(51,canvas.width-51), randomOf(-0.2,0.2), randomOf(51,canvas.height-51), randomOf(-0.2,0.2) ) );
 	}
 	
-	for( var i = 0; i < 10; i++ ) {
+	for( var i = 0; i < 3; i++ ) {
 		objects.push( new Pacman( randomOf(20,50), 'black', Date.now(), randomOf(-800,800), 0, randomOf(-800,-200), 0, randomOf(0,2), 0, 1/6, 0) );
 	}
 	
@@ -612,14 +624,16 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 	canvas.addEventListener('contextmenu', canvasMouseRightClick );
 	canvas.addEventListener('mousedown', canvasMouseDown );
 	canvas.addEventListener('mouseup', canvasMouseUp );
+	document.getElementsByClassName('balls-control__ball-spawn')[0].addEventListener('click', changeSpawnedObjectBall );
+	document.getElementsByClassName('balls-control__pacman-spawn')[1].addEventListener('click', changeSpawnedObjectPacman );
 }
 
 </script>
-<body onload="//scene()"">
+<body onload="scene()"">
 <canvas id="myCanvas" style="float:left">Canvas not supported!</canvas>
 Spawn a:<br/>
-<input type="radio" name="selected-object" value="ball">Ball</input><br/>
-<input type="radio" name="selected-object" value="pacman">Pacman</input><br/>
+<button class="changeSpawnedObject" name="type" value='Ball'>Ball</button><br/>
+<button class="changeSpawnedObject" name="type" value='Pacman'>Pacman</button><br/>
 <button  onclick="history.go(0)">Reload</button><br/>
 <button  onclick="objClear()">Clear</button><br/>
 <button  onclick="addBalls()">More balls ofsize:</button><input type="range" id="more-balls-size" min="10" max="40" step="1" value="15"> <br/>
