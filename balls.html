@@ -523,8 +523,8 @@ function objClear() {
 	objects.push( new Border() );
 }
 
-function addBalls() {
-	var size_r = document.getElementById('more-balls-size').value; //relative to canvas
+function addBalls(e) {
+	var size_r = document.getElementById('balls-control__ball-size').value; //relative to canvas
 	var size_a_min = Math.sqrt(canvas.height * canvas.width) * size_r * size_r / 10000; //absolute
 	var size_a_max = size_a_min * 1.3;
 	var speed_max = (100-size_r)*(100-size_r)*0.00008;
@@ -535,8 +535,8 @@ function addBalls() {
 }
 
 
-function addPacmans() {
-	var size_r = document.getElementById('more-pacmans-size').value; //relative to canvas
+function addPacmans(e) {
+	var size_r = document.getElementById('balls-control__packman-size').value; //relative to canvas
 	var size_a_min = Math.sqrt(canvas.height * canvas.width) * size_r * size_r / 10000; //absolute
 	var size_a_max = size_a_min * 1.3;
 	size_a_min *= 0.7;
@@ -626,6 +626,8 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 	document.getElementsByClassName('balls-control__ball-spawn')[0].addEventListener('click', changeSpawnedObjectBall );
 	document.getElementsByClassName('balls-control__pacman-spawn')[0].addEventListener('click', changeSpawnedObjectPacman );
 	document.getElementsByClassName('balls-control__elasticity')[0].addEventListener('change', changeElasticity );
+	document.getElementsByClassName('balls-control__balls-spawn')[0].addEventListener('click', addBalls );
+	document.getElementsByClassName('balls-control__pacmans-spawn')[0].addEventListener('click', addPacmans );
 }
 
 </script>
@@ -636,9 +638,9 @@ Spawn a:<br/>
 <button class="balls-control__pacman-spawn" name="type" value='Pacman'>Pacman</button><br/>
 <button  onclick="history.go(0)">Reload</button><br/>
 <button  onclick="objClear()">Clear</button><br/>
-<button  onclick="addBalls()">More balls ofsize:</button><input type="range" id="more-balls-size" min="10" max="40" step="1" value="15"> <br/>
-<button  onclick="addPacmans()">More pacmans of size:</button><input type="range" id="more-pacmans-size" min="15" max="70" step="1" value="20"> <br/>
-elasticity: <input type="range" class="balls-control__elasticity" min="0" max="100" step="1" value="95" onchange="bump_factor_change()"> <br/>
+<button class="balls-control__balls-spawn">More balls of size:</button><input type="range" id="balls-control__ball-size" min="10" max="40" step="1" value="15"> <br/>
+<button class="balls-control__pacmans-spawn">More pacmans of size:</button><input type="range" id="balls-control__packman-size" min="15" max="70" step="1" value="20"> <br/>
+elasticity: <input type="range" class="balls-control__elasticity" min="0" max="100" step="1" value="95"> <br/>
 </body>
 </html>
 
