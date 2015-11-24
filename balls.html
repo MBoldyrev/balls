@@ -164,7 +164,7 @@ function stuck_restart( nballs, npacmans, ibp, itp ) {
 		var bgstPcmn = undefined;
 		for( var obj in objects ) {
 			if( objects[obj].type && objects[obj].type == 'Pacman' ) 
-				if ( ( ! bgstPcmn ) || bgstPcmn.r < objects[obj] )
+				if ( ( ! bgstPcmn ) || bgstPcmn.r < objects[obj].r )
 					bgstPcmn = objects[obj];
 		}
 		if ( ! bgstPcmn ) {
@@ -551,8 +551,8 @@ function addPacmans(e) {
 function scene() { // <<<---------------------------MAIN----FUNC-----------------
 	canvas = document.getElementById('myCanvas');
 	context = canvas.getContext('2d');
-	canvas.width = window.innerWidth || 400;
-	canvas.height = 800;
+	canvas.width =  600;
+	canvas.height = 600;
 
 
 
