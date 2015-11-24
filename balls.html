@@ -183,7 +183,7 @@ function stuck_restart( nballs, npacmans, ibp, itp ) {
 	if( ibp <= itp ) {
 		// ball is above bgstPcmn, move bgstPcmn
 		itp = ibp + 50;
-		while( ! objects[itp] ) itp ++;
+		while( objects[itp] ) itp ++;
 		objects[itp] = bgstPcmn;
 		delete objects[ibp];
 		// swap
@@ -203,13 +203,14 @@ function stuck_restart( nballs, npacmans, ibp, itp ) {
 
 	if ( nballs != 0 ) { 
 		console.log(1);
+		console.log('recursive stuck_restart at ' + Date.now() ); 
 		setTimeout('stuck_restart(' + (nballs - 1) + ', ' + npacmans + ', ' + ibp + ', ' + itp + ');', 500 );
 	}
 	else {
 		// last iteration
 		delete objects[ibp];
 		for( var i = 0; i < npacmans; i++ ) {
-			objects.push( new Pacman( randomOf(20,50), 'black', Date.now(), randomOf(-800,800), 0, randomOf(-800,-200), 0, randomOf(0,2), 0, 1/6, 0) );
+			objects.push( new Pacman( randomOf(20,50), 'black', Date.now(), randomOf(0,canvas.width), 0, 10, 0, randomOf(0,2), 0, 1/6, 0) );
 		}
 	bgstPcmn.type = 'Pacman';
 	}
@@ -223,12 +224,13 @@ function check_stuck() {
 				return 0;
 			}
 	}
-	//console.log('stuck at ' + Date.now() ); 
+	console.log('stuck at ' + Date.now() ); 
 	if( stuck_cnt < 5 )
 		stuck_cnt ++;
 	else {
 		stuck_cnt = 0;
 		stuck_restart( 20, 6 );
+		console.log('call stuck_restart at ' + Date.now() ); 
 		//setTimeout( "stuck_restart( 20, 6 )", 5000 );
 	}
 }	
@@ -549,7 +551,7 @@ function addPacmans(e) {
 function scene() { // <<<---------------------------MAIN----FUNC-----------------
 	canvas = document.getElementById('myCanvas');
 	context = canvas.getContext('2d');
-	canvas.width = 200;
+	canvas.width = 400;
 	canvas.height = 400;
 
 
