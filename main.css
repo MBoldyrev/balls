@@ -21,6 +21,7 @@ body {
   color: white;
   font-family: serif;
   height: 1px;
+  margin: 0;
   /*min-height: 470px;*/
   /*z-index: -5;*/
 }
