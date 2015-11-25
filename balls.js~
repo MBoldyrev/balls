@@ -419,7 +419,7 @@ function physics() {
 }
 
 function moonTheme (a) {
-	if( document.getElementsByClassName('balls__moon_img')[0].style['visibility'] != 'visible' ) {
+	if( document.getElementsByClassName('balls__moon_img')[0].style['visibility'] != 'visible ) {
 		document.getElementsByClassName('balls__moon_img')[0].style['visibility'] = 'visible';
 		document.getElementsByClassName('balls-control')[0].classList.add('balls-control-moon');
 		document.body.classList.add('body-moon');

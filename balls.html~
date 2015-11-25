@@ -23,5 +23,4 @@
 <hr class="balls-control__hr">Elasticity:<input class="balls-control__range balls-control__elasticity" min="0" max="100" step="1" value="95" type="range"></div>
 </fieldset>
 </div>
-<img class="balls__moon_img" src="moon.gif" \>
 </body></html>

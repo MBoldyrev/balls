@@ -175,7 +175,7 @@ body {
   z-index: -200;
 }
 .balls-control-moon {
-  background: rgba(255, 255, 255, 0.1) !important;
+  background: rgba(0, 0, 0, 0.1) !important;
   box-shadow: none !important;
   border: none !important;
 }
