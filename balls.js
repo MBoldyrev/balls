@@ -499,17 +499,30 @@ function canvasMouseRightClick(e) {
 	
 }
 
-function changeSpawnedObjectBall(e) {
-	e.target.style['border-style'] = 'inset';
-	document.getElementsByClassName('balls-control__pacman-spawn')[0].style['border-style'] = '';
-	whatToSpawn = 'Ball';
+function resizeCanvas() {
+	canvas.width=window.innerWidth;
+	canvas.height=window.innerHeight;
 }
 
+function changeSpawnedObjectBall(e) {
+	document.getElementsByClassName('balls-control__ball-spawn')[0].classList.add('balls-control__button-pressed');
+	document.getElementsByClassName('balls-control__pacman-spawn')[0].classList.remove('balls-control__button-pressed');
+	document.getElementsByClassName('balls-control__mouse')[0].classList.remove('balls-control__button-pressed');
+	whatToSpawn = 'Ball';
+}
 function changeSpawnedObjectPacman(e) {
-	e.target.style['border-style'] = 'inset';
-	document.getElementsByClassName('balls-control__ball-spawn')[0].style['border-style'] = '';
+	document.getElementsByClassName('balls-control__ball-spawn')[0].classList.remove('balls-control__button-pressed');
+	document.getElementsByClassName('balls-control__pacman-spawn')[0].classList.add('balls-control__button-pressed');
+	document.getElementsByClassName('balls-control__mouse')[0].classList.remove('balls-control__button-pressed');
 	whatToSpawn = 'Pacman';
 }
+function changeSpawnedObjectNothing(e) {
+	document.getElementsByClassName('balls-control__ball-spawn')[0].classList.remove('balls-control__button-pressed');
+	document.getElementsByClassName('balls-control__pacman-spawn')[0].classList.remove('balls-control__button-pressed');
+	document.getElementsByClassName('balls-control__mouse')[0].classList.add('balls-control__button-pressed');
+	whatToSpawn = undefined;
+}
+
 function changeElasticity(e) {
 	bump_factor = Math.log(e.target.value * 220.25465794806706 + 1)/10;
 	console.log(bump_factor);
@@ -622,8 +635,14 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 	canvas.addEventListener('contextmenu', canvasMouseRightClick );
 	canvas.addEventListener('mousedown', canvasMouseDown );
 	canvas.addEventListener('mouseup', canvasMouseUp );
+	window.addEventListener('resize', resizeCanvas );
+//	document.getElementById('balls-control__ball-spawn').addEventListener('click', changeSpawnedObjectBall );
+//	document.getElementById('balls-control__pacman-spawn').addEventListener('click', changeSpawnedObjectPacman );
+//	document.getElementById('balls-control__mouse').addEventListener('click', changeSpawnedObjectNothing );
 	document.getElementsByClassName('balls-control__ball-spawn')[0].addEventListener('click', changeSpawnedObjectBall );
 	document.getElementsByClassName('balls-control__pacman-spawn')[0].addEventListener('click', changeSpawnedObjectPacman );
+	document.getElementsByClassName('balls-control__mouse')[0].addEventListener('click', changeSpawnedObjectNothing );
+	document.getElementsByClassName('balls-control__elasticity')[0].addEventListener('change', changeElasticity );
 	document.getElementsByClassName('balls-control__elasticity')[0].addEventListener('change', changeElasticity );
 	document.getElementsByClassName('balls-control__balls-spawn')[0].addEventListener('click', addBalls );
 	document.getElementsByClassName('balls-control__pacmans-spawn')[0].addEventListener('click', addPacmans );

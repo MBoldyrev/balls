@@ -191,6 +191,9 @@ body {
   text-align: center;
   color: #F58A00;
 }
+.balls-control__button-pressed {
+  border-style: inset !important;
+}
 .balls-control__spawn-one {
   width: 23%;
   float: left;
