@@ -179,6 +179,7 @@ body {
   background: rgba(255, 255, 255, 0.1) !important;
   box-shadow: none !important;
   border: none !important;
+  text-shadow: 1px 0px 2px #000000 !important;
 }
 .body-moon {
   background: black !important;
@@ -206,6 +207,7 @@ body {
   padding-bottom: 0;
   text-align: center;
   color: #F58A00;
+  text-shadow: 1px -1px 1px #FFC930;
 }
 .balls-control__button-pressed {
   border-style: inset !important;
@@ -235,7 +237,9 @@ body {
   font-weight: bold;
   color: #F58A00;
   text-align: center;
+  /*
   text-shadow: 1px -1px 1px #FFC930;
+  */
   font-size: 18px;
 }
 .balls-control__button {
