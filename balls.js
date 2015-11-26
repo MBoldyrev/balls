@@ -7,7 +7,6 @@ var bump_factor = 0.98;
 var stuck_cnt = 0;
 var ballColors = ['red', 'blue'];
 var whatToSpawn = undefined;
-var theme = 'start';
 
 function randomOf( min, max ) {
 	return Math.random() * ( max - min ) + min;
@@ -419,21 +418,6 @@ function physics() {
 	}
 }
 
-function moonTheme (a) {
-	if( theme != 'moon' ) {
-		document.getElementsByClassName('balls__moon_img')[0].style['visibility'] = 'visible';
-		document.getElementsByClassName('balls-control')[0].classList.add('balls-control-moon');
-		document.body.classList.add('body-moon');
-		theme = 'moon';
-	}
-	else { 
-		document.getElementsByClassName('balls__moon_img')[0].style['visibility'] = 'hidden';
-		document.getElementsByClassName('balls-control')[0].classList.remove('balls-control-moon');
-		document.body.classList.remove('body-moon');
-		theme = 'normal';
-	}
-}
-
 function drawFrame( ) {
 	physics();
 	canvas.width = canvas.width; // clear canvas
@@ -447,19 +431,8 @@ function canvasMouseDown(e) {
 		mouseDrag = [ e.offsetX, e.offsetY, Date.now() ];
 }
 
-function canvasMouseClickInit(e) {
-	console.log('switch  to normal mode');
-	document.getElementById('balls-control-div').style['visibility']='visible';
-	canvas.removeEventListener('click', canvasMouseClickInit);
-	for( var i = 0; i < 6; i++ ) {
-		//objects.push( new Pacman( randomOf(20,50), 'black', Date.now(), randomOf(-800,800), 0, randomOf(-800,-200), 0, randomOf(0,2), 0, 1/6, 0) );
-	}
-}
-	
 function canvasMouseUp(e) {
 	if( e.button != 0 )
-		return;
-	if( ! objectBeingSpawned )
 		return;
 	if( objectBeingSpawned.type == 'notYetABall' ) {
 		objectBeingSpawned.type='Ball';
@@ -514,11 +487,6 @@ function canvasMouseMove(e) {
 	}
 }
 function canvasMouseRightClick(e) {
-	if( e.offsetX < 5 && e.offsetY < 5 ) {
-		moonTheme();
-	} else 
-		if ( whatToSpawn != 'Ball' )
-			return 0;
 	if( objectBeingSpawned && objectBeingSpawned.type == 'notYetABall' ) {
 		objectBeingSpawned.color = ( objectBeingSpawned.color + 1 ) % ballColors.length;
 	}
@@ -644,12 +612,12 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 	]
 
 	// populate objects[] with for loops
-	
-	for( var i = 0; i < 20; i++ ) {
-		//objects.push( new Ball( randomOf(5,60), i % ballColors.length, Date.now(), randomOf(51,canvas.width-51), randomOf(-0.2,0.2), randomOf(51,canvas.height-51), randomOf(-0.2,0.2) ) );
+	/*
+	for( var i = 0; i < 10; i++ ) {
+		objects.push( new Ball( randomOf(5,60), i % ballColors.length, Date.now(), randomOf(51,canvas.width-51), randomOf(-0.2,0.2), randomOf(51,canvas.height-51), randomOf(-0.2,0.2) ) );
 	}
-	/* this is done on click
-	for( var i = 0; i < 6; i++ ) {
+	
+	for( var i = 0; i < 3; i++ ) {
 		objects.push( new Pacman( randomOf(20,50), 'black', Date.now(), randomOf(-800,800), 0, randomOf(-800,-200), 0, randomOf(0,2), 0, 1/6, 0) );
 	}
 	*/
@@ -667,7 +635,6 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 	canvas.addEventListener('contextmenu', canvasMouseRightClick );
 	canvas.addEventListener('mousedown', canvasMouseDown );
 	canvas.addEventListener('mouseup', canvasMouseUp );
-	canvas.addEventListener('click', canvasMouseClickInit );
 	window.addEventListener('resize', resizeCanvas );
 //	document.getElementById('balls-control__ball-spawn').addEventListener('click', changeSpawnedObjectBall );
 //	document.getElementById('balls-control__pacman-spawn').addEventListener('click', changeSpawnedObjectPacman );
@@ -679,5 +646,4 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 	document.getElementsByClassName('balls-control__elasticity')[0].addEventListener('change', changeElasticity );
 	document.getElementsByClassName('balls-control__balls-spawn')[0].addEventListener('click', addBalls );
 	document.getElementsByClassName('balls-control__pacmans-spawn')[0].addEventListener('click', addPacmans );
-	document.getElementsByClassName('balls-control__clear')[0].addEventListener('click', objClear );
 }
