@@ -21,6 +21,7 @@ body {
   color: white;
   font-family: serif;
   height: 1px;
+  margin: 0;
   /*min-height: 470px;*/
   /*z-index: -5;*/
 }
@@ -167,6 +168,25 @@ body {
 #balls-control {
   bottom: 0;
 }
+.balls__moon_img {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  visibility: hidden;
+  z-index: -200;
+}
+.balls-control-moon {
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: none !important;
+  border: none !important;
+  text-shadow: 1px 0px 2px #000000 !important;
+}
+.body-moon {
+  background: black !important;
+}
+#balls-control-div {
+  visibility: hidden;
+}
 .balls-control {
   width: 360px;
   margin: auto;
@@ -190,6 +210,7 @@ body {
   padding-bottom: 0;
   text-align: center;
   color: #F58A00;
+  text-shadow: 1px -1px 1px #FFC930;
 }
 .balls-control__button-pressed {
   border-style: inset !important;
@@ -219,7 +240,9 @@ body {
   font-weight: bold;
   color: #F58A00;
   text-align: center;
+  /*
   text-shadow: 1px -1px 1px #FFC930;
+  */
   font-size: 18px;
 }
 .balls-control__button {
