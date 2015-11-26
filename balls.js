@@ -452,7 +452,7 @@ function canvasMouseClickInit(e) {
 	document.getElementById('balls-control-div').style['visibility']='visible';
 	canvas.removeEventListener('click', canvasMouseClickInit);
 	for( var i = 0; i < 6; i++ ) {
-		//objects.push( new Pacman( randomOf(20,50), 'black', Date.now(), randomOf(-800,800), 0, randomOf(-800,-200), 0, randomOf(0,2), 0, 1/6, 0) );
+		objects.push( new Pacman( randomOf(20,50), 'black', Date.now(), randomOf(-800,800), 0, randomOf(-800,-200), 0, randomOf(0,2), 0, 1/6, 0) );
 	}
 }
 	
@@ -646,7 +646,7 @@ function scene() { // <<<---------------------------MAIN----FUNC----------------
 	// populate objects[] with for loops
 	
 	for( var i = 0; i < 20; i++ ) {
-		//objects.push( new Ball( randomOf(5,60), i % ballColors.length, Date.now(), randomOf(51,canvas.width-51), randomOf(-0.2,0.2), randomOf(51,canvas.height-51), randomOf(-0.2,0.2) ) );
+		objects.push( new Ball( randomOf(5,60), i % ballColors.length, Date.now(), randomOf(51,canvas.width-51), randomOf(-0.2,0.2), randomOf(51,canvas.height-51), randomOf(-0.2,0.2) ) );
 	}
 	/* this is done on click
 	for( var i = 0; i < 6; i++ ) {
